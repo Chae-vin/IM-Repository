@@ -177,6 +177,24 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `update_last_modified` BEFORE UPDATE O
     SET NEW.last_modified = CURRENT_TIMESTAMP;
 END
 
+CREATE DEFINER=`root`@`localhost` TRIGGER `after_transaction_update` AFTER UPDATE ON `transactions` FOR EACH ROW
+BEGIN
+    DECLARE new_budget_amount DECIMAL(10, 2);
+
+    SELECT 
+        (b.amount - NEW.amount + OLD.amount)
+    INTO new_budget_amount
+    FROM
+        budgets b
+    WHERE
+        b.budget_id = NEW.budget_id;
+
+    UPDATE budgets
+    SET amount = new_budget_amount
+    WHERE budget_id = NEW.budget_id;
+END;
+
+
 -- ===================
 -- USERS
 
