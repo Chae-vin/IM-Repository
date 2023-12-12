@@ -11,7 +11,6 @@ def get_transactions():
     result = fetchall(query)
     return result
 
-
 def get_transaction(trans_id):
     query = "SELECT * FROM get_transactions WHERE trans_id = %s"
     params = (trans_id,)
@@ -29,3 +28,5 @@ def delete_transaction(trans_id):
     params = (trans_id,)
     result = fetchone(query, params)
     return result
+
+

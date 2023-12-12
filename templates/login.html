@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login and Signup</title>
+  </head>
+  <body>
+    <div class="big-box">
+      <!-- Login Form -->
+      <h2>Login</h2>
+      <form
+        id="login-form"
+        onsubmit="event.preventDefault(); submitLoginForm()"
+      >
+        <label for="username">Username:</label><br />
+        <input type="text" id="username" name="username" /><br />
+        <label for="password">Password:</label><br />
+        <input type="password" id="password" name="password" /><br />
+        <input type="submit" value="Login" />
+      </form>
+
+      <!-- Signup Form -->
+      <h2>Signup</h2>
+      <form
+        id="signup-form"
+        onsubmit="event.preventDefault(); submitSignupForm()"
+      >
+        <label for="username">Username:</label><br />
+        <input type="text" id="username" name="username" /><br />
+        <label for="password">Password:</label><br />
+        <input type="password" id="password" name="password" /><br />
+        <label for="email">Email:</label><br />
+        <input type="text" id="email" name="email" /><br />
+        <input type="submit" value="Sign Up" />
+      </form>
+    </div>
+
+    <script>
+      function submitLoginForm() {
+        const form = document.getElementById("login-form");
+        const formData = new FormData(form);
+        let url = `http://127.0.0.1:5000/`;
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(Object.fromEntries(formData)),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Success:", data);
+            window.location.href = "/index";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function submitSignupForm() {
+        const form = document.getElementById("signup-form");
+        const formData = new FormData(form);
+        let url = `http://127.0.0.1:5000/users`;
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(Object.fromEntries(formData)),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Success:", data);
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>

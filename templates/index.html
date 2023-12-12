@@ -194,133 +194,6 @@
 
   <body>
 
-    <!-- Login/Signup Modal -->
-    <div id="loginSignupModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="loginFormContainer">
-          <!-- User Login Form -->
-            <form id="loginForm" onsubmit="event.preventDefault(); loginUser()">
-              <label for="loginUsername">Username:</label>
-              <input type="text" id="loginUsername" name="loginUsername" required /><br />
-
-              <label for="loginPassword">Password:</label>
-              <input type="password" id="loginPassword" name="loginPassword" required /><br />
-
-              <button type="submit">Login</button>
-            </form>
-        </div>
-        <div id="signupFormContainer" style="display: none;">
-          <!-- User Signup Form -->
-            <form id="signupForm" onsubmit="event.preventDefault(); signupUser()">
-              <label for="signupUsername">Username:</label>
-              <input type="text" id="signupUsername" name="signupUsername" required /><br />
-
-              <label for="signupPassword">Password:</label>
-              <input type="password" id="signupPassword" name="signupPassword" required /><br />
-
-              <label for="signupEmail">Email:</label>
-              <input type="email" id="signupEmail" name="signupEmail" required /><br />
-
-              <button type="submit">Signup</button>
-            </form>
-        </div>
-        <button onclick="toggleForms()">Switch to Signup</button>
-      </div>
-    </div>
-
-
-    <script>
-
-      // // Check if the user is authenticated on page load
-      //   document.addEventListener('DOMContentLoaded', function () {
-      //     checkAuthentication();
-      //   });
-
-      //   function checkAuthentication() {
-      //   if (!isUserAuthenticated()) {
-      //     redirectToLogin();
-      //   }
-      // }
-
-      function redirectToLogin() {
-        // Redirect the user to the login page
-        window.location.href = '/login';
-      }
-
-      function openModal() {
-        document.getElementById("loginSignupModal").style.display = "block";
-      }
-
-      function closeModal() {
-        document.getElementById("loginSignupModal").style.display = "none";
-      }
-
-      function toggleForms() {
-        const loginFormContainer = document.getElementById("loginFormContainer");
-        const signupFormContainer = document.getElementById("signupFormContainer");
-
-        if (loginFormContainer.style.display === "none") {
-          loginFormContainer.style.display = "block";
-          signupFormContainer.style.display = "none";
-        } else {
-          loginFormContainer.style.display = "none";
-          signupFormContainer.style.display = "block";
-        }
-      }
-
-      function loginUser() {
-        const username = document.getElementById("loginUsername").value;
-        const password = document.getElementById("loginPassword").value;
-
-        fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          // Handle the login response
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-
-      function signupUser() {
-        const username = document.getElementById("signupUsername").value;
-        const password = document.getElementById("signupPassword").value;
-        const email = document.getElementById("signupEmail").value;
-
-        fetch('/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password, email }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          // Handle the signup response
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-
-      // Close the modal if the user clicks outside of it
-      window.onclick = function (event) {
-        const modal = document.getElementById("loginSignupModal");
-        if (event.target === modal) {
-          closeModal();
-        }
-      };
-    </script>
-
-
-
     <div class="container">
       <header>Finance Tracker</header>
       <br/>
@@ -580,13 +453,16 @@
             <div class="table-container">
               <table>
                 <tr>
+                  <th>ID</th>
                   <th>Category</th>
                   <th>Budget</th>
                 </tr>
                 {% for budget in budgets %}
                 <tr>
+                  <td>{{ budget.budget_id }}</td>
                   <td>{{ budget.category }}</td>
                   <td>{{ budget.amount }}</td>
+                 
                 </tr>
                 {% endfor %}
               </table>
@@ -727,4 +603,16 @@
   
     
   </body>
-</html>
+  
+ElementById('financeTrackerContainer').style.display = 'block';
+      }
+
+      // Call showLogin when the page loads
+      window.onload = showLogin;
+    </script>
+
+
+    
+  
+    
+  </body>

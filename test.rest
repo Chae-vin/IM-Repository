@@ -17,11 +17,11 @@ GET {{host}}/transactions
 Content-Type: application/json
 
 ### Read single item by id
-GET {{host}}/transactions/2  
+GET {{host}}/transactions/7  
 Content-Type: application/json
 
 ### Update an item
-PUT {{host}}/transactions/2
+PUT {{host}}/transactions/8
 Content-Type: application/json 
  
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 }
 
 ### Delete an item
-DELETE {{host}}/transactions/1
+DELETE {{host}}/transactions/3
 Content-Type: application/json
 
 
@@ -71,3 +71,41 @@ Content-Type: application/json
 ### Delete an item
 DELETE {{host}}/budgets/12
 Content-Type: application/json
+
+
+
+#### U S E R S
+
+### Create an item
+POST {{host}}/users
+Content-Type: application/json
+
+{
+  "username": "john_doe1",
+  "password": "secure_password1",
+  "email": "john.doe@example.com1"
+}
+
+### Read all items
+GET {{host}}/users
+Content-Type: application/json
+
+### Read single item by id
+GET {{host}}/users/1
+Content-Type: application/json
+
+### Update an item
+PUT {{host}}/users/1
+Content-Type: application/json
+
+{
+  "new_username": "updated_john_doe",
+  "new_password": "updated_secure_password",
+  "new_email": "updated_john.doe@example.com"
+}
+
+### Delete an item
+DELETE {{host}}/users/1
+Content-Type: application/json
+
+

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 from flask_mysqldb import MySQL
 from database import fetchone, fetchall
 from transactions import (
@@ -16,14 +16,19 @@ from budgets import (
     get_budget,
 )
 from users import (
+    create_user,
+    get_user_by_username,
+    get_users,
+    get_userById,
     update_user,
     delete_user,
-    create_user as create_user_function,
+    authenticate_user
 )
 from database import set_mysql
 from flask_cors import CORS
 
 app = Flask(__name__)
+app.secret_key = 'piogensan'  # replace 'your_secret_key' with your actual secret key
 CORS(app)
 
 app.config["MYSQL_USER"] = "root"
@@ -35,15 +40,68 @@ mysql = MySQL(app)
 set_mysql(mysql)
 
 
-@app.route("/")
-def home():
-    content_type_header = request.headers.get("Content-Type")
-    if content_type_header and "application/json" in content_type_header:
-        return jsonify(financial_data=get_transactions(), budgets=get_budgets())
+@app.route("/", methods=["GET", "POST"])
+def login_page():
+    if request.method == "POST":
+        data = request.get_json()
+        username = data["username"]
+        password = data["password"]
+        user = authenticate_user(username, password)
+        if user:
+            session['username'] = username
+            return jsonify({"message": "Login successful"})
+        else:
+            return jsonify({"message": "Invalid username or password"}), 401
     else:
-        return render_template(
-            "index.html", financial_data=get_transactions(), budgets=get_budgets()
-        )
+        return render_template("login.html")
+
+
+@app.route("/index")
+def home():
+    if 'username' not in session:
+        return redirect(url_for('login_page'))
+    else:
+        # user = get_user_by_username(session['username'])  # Assuming you have this function
+        # user_id = user['user_id']
+        content_type_header = request.headers.get("Content-Type")
+        if content_type_header and "application/json" in content_type_header:
+            return jsonify(financial_data=get_transactions(), budgets=get_budgets())
+        else:
+            return render_template(
+                "index.html", financial_data=get_transactions(), budgets=get_budgets()
+            )
+
+
+@app.route("/users", methods=["GET", "POST"])
+def users():
+    if request.method == "POST":
+        data = request.get_json()
+        username = data["username"]
+        password = data["password"]
+        email = data["email"]
+        user_id = create_user(
+            username, password, email)
+        return jsonify({"created user": user_id})
+    else:
+        users = get_users()
+        return jsonify(users)
+
+
+@app.route("/users/<int:user_id>", methods=["GET", "PUT", "DELETE"])
+def user(user_id):
+    if request.method == "PUT":
+        data = request.get_json()
+        new_username = data["new_username"]
+        new_password = data["new_password"]
+        new_email = data["new_email"]
+        user_id = update_user(user_id, new_username, new_password, new_email)
+        return jsonify({"updated user": user_id})
+    elif request.method == "DELETE":
+        user_id = delete_user(user_id)
+        return jsonify({"deleted user": user_id})
+    else:
+        user = get_userById(user_id)
+        return jsonify(user)
 
 
 @app.route("/transactions", methods=["GET", "POST"])
@@ -109,65 +167,6 @@ def budget(budget_id):
     else:
         budget = get_budget(budget_id)
         return jsonify(budget)
-
-
-@app.route("/login", methods=["POST"])
-def login():
-    data = request.get_json()
-    # Add your login logic here
-    return jsonify({"message": "Login successful"})
-
-
-@app.route("/signup", methods=["POST"])
-def signup():
-    data = request.get_json()
-    username = data["username"]
-    password = data["password"]
-    email = data["email"]
-    user_id = create_user_function(username, password, email)
-    return jsonify({"created user": user_id})
-
-
-@app.route("/users/<int:user_id>", methods=["GET"])
-def get_single_user(user_id):
-    try:
-        user = get_user(user_id)
-        if user:
-            return jsonify(user)
-        else:
-            return jsonify({"error": "User not found"}), 404  # Not Found
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500  # Internal Server Error
-
-
-def get_user(user_id):
-    query = "SELECT * FROM get_users WHERE user_id = %s"
-    params = (user_id,)
-    result = fetchone(query, params)
-    return result
-
-
-@app.route("/users", methods=["GET"])
-def get_users():
-    users = fetchall("SELECT * FROM get_users")
-    return jsonify(users)
-
-
-@app.route("/users/<int:user_id>", methods=["PUT", "DELETE"])
-def modify_user(user_id):
-    if request.method == "PUT":
-        data = request.get_json()
-        new_username = data["new_username"]
-        new_password = data["new_password"]
-        new_email = data["new_email"]
-        user_id = update_user(user_id, new_username, new_password, new_email)
-        return jsonify({"updated user": user_id})
-    elif request.method == "DELETE":
-        user_id = delete_user(user_id)
-        return jsonify({"deleted user": user_id})
-    else:
-        return jsonify({"error": "Invalid method"}), 400  # Bad Request
-
 
 if __name__ == "__main__":
     app.run(debug=True)
