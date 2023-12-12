@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finance Tracker</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #252323;
+        margin: 20px;
+        padding: 20px;
+      }
+
+      header {
+        background-color: #474646; 
+        color: #ffffff;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Arial', sans-serif;
+        display: block;
+        font-size: 30px; 
+        font-weight: bold; 
+        border-radius: 10px;
+      }
+  
+      h1 {
+        color: #fff;
+      }
+
+      h2, h4 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #fff;
+        text-align: center;
+      }
+  
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        /* border-radius: 5px; */
+        overflow: hidden;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .table-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .label-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        text-align: center;
+        align-items: center;
+        font-size: 10px;
+      }
+  
+      th, td {
+        border: 1px solid #fff;
+        padding: 8px;
+        text-align: center;
+      }
+  
+      th {
+        background-color: rgba(70, 68, 68, 0.8);
+        font-size: 14px;
+        font-weight: 100;
+        color: #fff;
+      }
+
+      td {
+        color: #fff;
+      }
+  
+      form {
+        display: none;
+        margin-bottom: 20px;
+      }
+  
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #fff;
+      }
+  
+      input, select, button {
+        margin-bottom: 10px;
+        padding: 8px;
+      }
+  
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+  
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .box-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+    .big-box {
+      width: 45%; /* Adjust the width as needed */
+      background-color: #333; /* Set background color for the boxes */
+      color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      height: auto;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .calculator-container {
+      text-align: center;
+      background-color: #555;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+  .calculator-display {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+  }
+
+  .calculator-button {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    font-size: 18px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .calculator-operator {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    font-size: 18px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .calculator-equals {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    font-size: 18px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .calculator-button:hover,
+  .calculator-operator:hover,
+  .calculator-equals:hover {
+    background-color: #45a049;
+  }
+
+    </style>
+
+    
+  </head>
+
+  <body>
+
+    <!-- Login/Signup Modal -->
+    <div id="loginSignupModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="loginFormContainer">
+          <!-- User Login Form -->
+            <form id="loginForm" onsubmit="event.preventDefault(); loginUser()">
+              <label for="loginUsername">Username:</label>
+              <input type="text" id="loginUsername" name="loginUsername" required /><br />
+
+              <label for="loginPassword">Password:</label>
+              <input type="password" id="loginPassword" name="loginPassword" required /><br />
+
+              <button type="submit">Login</button>
+            </form>
+        </div>
+        <div id="signupFormContainer" style="display: none;">
+          <!-- User Signup Form -->
+            <form id="signupForm" onsubmit="event.preventDefault(); signupUser()">
+              <label for="signupUsername">Username:</label>
+              <input type="text" id="signupUsername" name="signupUsername" required /><br />
+
+              <label for="signupPassword">Password:</label>
+              <input type="password" id="signupPassword" name="signupPassword" required /><br />
+
+              <label for="signupEmail">Email:</label>
+              <input type="email" id="signupEmail" name="signupEmail" required /><br />
+
+              <button type="submit">Signup</button>
+            </form>
+        </div>
+        <button onclick="toggleForms()">Switch to Signup</button>
+      </div>
+    </div>
+
+
+    <script>
+
+      // // Check if the user is authenticated on page load
+      //   document.addEventListener('DOMContentLoaded', function () {
+      //     checkAuthentication();
+      //   });
+
+      //   function checkAuthentication() {
+      //   if (!isUserAuthenticated()) {
+      //     redirectToLogin();
+      //   }
+      // }
+
+      function redirectToLogin() {
+        // Redirect the user to the login page
+        window.location.href = '/login';
+      }
+
+      function openModal() {
+        document.getElementById("loginSignupModal").style.display = "block";
+      }
+
+      function closeModal() {
+        document.getElementById("loginSignupModal").style.display = "none";
+      }
+
+      function toggleForms() {
+        const loginFormContainer = document.getElementById("loginFormContainer");
+        const signupFormContainer = document.getElementById("signupFormContainer");
+
+        if (loginFormContainer.style.display === "none") {
+          loginFormContainer.style.display = "block";
+          signupFormContainer.style.display = "none";
+        } else {
+          loginFormContainer.style.display = "none";
+          signupFormContainer.style.display = "block";
+        }
+      }
+
+      function loginUser() {
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the login response
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+
+      function signupUser() {
+        const username = document.getElementById("signupUsername").value;
+        const password = document.getElementById("signupPassword").value;
+        const email = document.getElementById("signupEmail").value;
+
+        fetch('/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password, email }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the signup response
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+
+      // Close the modal if the user clicks outside of it
+      window.onclick = function (event) {
+        const modal = document.getElementById("loginSignupModal");
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
+    </script>
+
+
+
+    <div class="container">
+      <header>Finance Tracker</header>
+      <br/>
+      <br/>
+       <!-- New box containers -->
+        <div class="box-container">
+          <div class="big-box">
+            <h4>Manage Transactions</h4>
+            <br/>
+            <div class="button-container">
+              <button onclick="showForm('addTransactionForm')">Add Transaction</button>
+              <button onclick="showForm('updateTransactionForm')">Update Transaction</button>
+              <button onclick="showForm('deleteTransactionForm')">Delete Transaction</button>
+              <!-- <button onclick="showForm('deleteBudgetForm')">Delete Budget</button> -->
+            </div>
+
+        <!-- <h2>Add Transaction</h2> -->
+        <div class="forms-container" style="background-color: #555; padding: 15px; border-radius: 10px; margin-top: 20px;">
+          <form
+            id="addTransactionForm"
+            onsubmit="event.preventDefault(); submitForm('addTransactionForm', '/transactions')"
+          >
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required /><br />
+
+            <label for="budget_id">Category:</label>
+            <select id="budget_id" name="budget_id" required>
+              {% for budget in budgets %}
+              <option value="{{ budget.budget_id }}">{{ budget.category }}</option>
+              {% endfor %}</select
+            ><br />
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required /><br />
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="trans_date" required /><br />
+
+            <button type="submit">Add Transaction</button>
+          </form>
+
+      <!-- <h2>Update Transaction</h2> -->
+      <form
+        id="updateTransactionForm"
+        onsubmit="event.preventDefault(); submitForm('updateTransactionForm', '/transactions')"
+      >
+        <label for="trans_id">ID:</label>
+        <input type="number" id="trans_id" name="trans_id" required /><br />
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required /><br />
+
+        <label for="budget_id">Category:</label>
+        <select id="budget_id" name="budget_id" required>
+          {% for budget in budgets %}
+          <option value="{{ budget.budget_id }}">{{ budget.category }}</option>
+          {% endfor %}</select
+        ><br />
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required /><br />
+
+        <label for="trans_date">Date:</label>
+        <input type="date" id="trans_date" name="trans_date" required /><br />
+
+        <button type="submit">Update Transaction</button>
+      </form>
+
+      <!-- <h2>Delete Transaction</h2> -->
+      <form
+        id="deleteTransactionForm"
+        onsubmit="event.preventDefault(); submitForm('deleteTransactionForm', '/transactions')"
+      >
+        <label for="trans_id">ID:</label>
+        <input type="number" id="trans_id" name="trans_id" required /><br />
+        <button type="submit">Delete Transaction</button>
+      </form>
+
+      <!-- <h2>Delete Transaction</h2> -->
+      <form
+        id="deleteTransactionForm"
+        onsubmit="event.preventDefault(); submitForm('deleteTransactionForm', '/transactions')"
+      >
+        <label for="trans_id">ID:</label>
+        <input type="number" id="trans_id" name="trans_id" required /><br />
+        <button type="submit">Delete Transaction</button>
+      </form>
+    </div>
+
+          <script>
+            function showForm(formId) {
+            // Hide all forms
+            document.querySelectorAll('form').forEach(form => {
+              form.style.display = 'none';
+            });
+
+            // Show the selected form
+            document.getElementById(formId).style.display = 'block';
+          }
+            function submitForm(formId, endpoint) {
+              const form = document.getElementById(formId);
+              const formData = new FormData(form);
+              let url = `http://127.0.0.1:5000${endpoint}`;
+              let method;
+
+              if (formId.includes("addTransactionForm")) {
+                method = "POST";
+              } else if (formId.includes("updateTransactionForm")) {
+                method = "PUT";
+                url = url + "/" + formData.get("trans_id");
+              } else if (formId.includes("deleteTransactionForm")) {
+                method = "DELETE";
+                url = url + "/" + formData.get("trans_id");
+              }
+
+              fetch(url, {
+                method: method,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  console.log("Success:", data);
+                  location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }
+            
+          </script>
+
+          </div>
+
+          <div class="big-box">
+            <!-- budget operations -->
+            <h4>Manage Budgets</h4>
+            <br/>
+            <div class="button-container">
+              <button onclick="showFormBudgets('addBudgetForm')">Add Budget</button>
+              <button onclick="showFormBudgets('updateBudgetForm')">Update Budget</button>
+              <button onclick="showFormBudgets('deleteBudgetForm')">Delete Budget</button>
+            </div>
+
+            <div class="forms-container" style="background-color: #555; padding: 15px; border-radius: 10px; margin-top: 20px;">
+              <!-- Add budget form -->
+              <form
+                id="addBudgetForm"
+                onsubmit="event.preventDefault(); submitFormBudgets('addBudgetForm', '/budgets')"
+              >
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required /><br />
+
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required /><br />
+
+                <button type="submit">Add Budget</button>
+              </form>
+              <!-- Update budget form -->
+              <form
+                id="updateBudgetForm"
+                onsubmit="event.preventDefault(); submitFormBudgets('updateBudgetForm', '/budgets')"
+              >
+                <label for="budget_id">ID:</label>
+                <input type="number" id="budget_id" name="budget_id" required /><br />
+
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required /><br />
+
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required /><br />
+
+                <button type="submit">Update Budget</button>
+              </form>
+              <!-- Delete budget form -->
+              <form
+                id="deleteBudgetForm"
+                onsubmit="event.preventDefault(); submitFormBudgets('deleteBudgetForm', '/budgets')"
+              >
+                <label for="budget_id">ID:</label>
+                <input type="number" id="budget_id" name="budget_id" required /><br />
+
+                <button type="submit">Delete Budget</button>
+              </form>
+            </div>
+
+            <script>
+
+              function showFormBudgets(formId) {
+                // Hide all forms
+                document.querySelectorAll('form').forEach(form => {
+                  form.style.display = 'none';
+                });
+            
+                // Show the selected form
+                document.getElementById(formId).style.display = 'block';
+              }
+            
+              function submitFormBudgets(formId, endpoint) {
+              const form = document.getElementById(formId);
+              const formData = new FormData(form);
+              let url = `http://127.0.0.1:5000${endpoint}`;
+              let method;
+
+              if (formId.includes("addBudgetForm")) {
+                method = "POST";
+              } else if (formId.includes("updateBudgetForm")) {
+                method = "PUT";
+                url = url + "/" + formData.get("budget_id");
+              } else if (formId.includes("deleteBudgetForm")) {
+                method = "DELETE";
+                url = url + "/" + formData.get("budget_id");
+              }
+
+              fetch(url, {
+                method: method,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  console.log("Success:", data);
+                  location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }
+            
+            </script>
+
+          </div>
+
+      </div>
+
+
+      <!-- container for the tbl budget and calculator -->
+      <div class="box-container">
+        <!-- table budget -->
+        <div class="big-box">
+          <h4>Budgets Table</h4>
+          <!-- <div class="label-container"> -->
+            <div class="table-container">
+              <table>
+                <tr>
+                  <th>Category</th>
+                  <th>Budget</th>
+                </tr>
+                {% for budget in budgets %}
+                <tr>
+                  <td>{{ budget.category }}</td>
+                  <td>{{ budget.amount }}</td>
+                </tr>
+                {% endfor %}
+              </table>
+            <!-- </div> -->
+          </div>
+
+          <br/>
+        </div>
+        <!-- calculator -->
+        <div class="big-box">
+          <h4>Calculator</h4>
+            <div id="calculator" class="calculator-container">
+              <input type="text" id="display" class="calculator-display" disabled />
+              <br />
+          
+              <button onclick="appendNumber('7')" class="calculator-button">7</button>
+              <button onclick="appendNumber('8')" class="calculator-button">8</button>
+              <button onclick="appendNumber('9')" class="calculator-button">9</button>
+              <button onclick="clearDisplay()" class="calculator-button">C</button>
+              <br />
+          
+              <button onclick="appendNumber('4')" class="calculator-button">4</button>
+              <button onclick="appendNumber('5')" class="calculator-button">5</button>
+              <button onclick="appendNumber('6')" class="calculator-button">6</button>
+              <button onclick="appendOperator('+')" class="calculator-operator">+</button>
+              <br />
+          
+              <button onclick="appendNumber('1')" class="calculator-button">1</button>
+              <button onclick="appendNumber('2')" class="calculator-button">2</button>
+              <button onclick="appendNumber('3')" class="calculator-button">3</button>
+              <button onclick="appendOperator('-')" class="calculator-operator">-</button>
+              <br />
+          
+              <button onclick="appendNumber('0')" class="calculator-button">0</button>
+              <button onclick="appendOperator('*')" class="calculator-operator">*</button>
+              <button onclick="appendOperator('/')" class="calculator-operator">/</button>
+              <button onclick="calculate()" class="calculator-equals">=</button>
+            </div>
+            
+            <script>
+              let currentInput = "";
+              let currentOperator = "";
+              let storedValue = "";
+            
+              function appendNumber(number) {
+                currentInput += number;
+                updateDisplay();
+              }
+            
+              function appendOperator(operator) {
+                if (currentInput !== "") {
+                  currentOperator = operator;
+                  storedValue = currentInput;
+                  currentInput = "";
+                  updateDisplay();
+                }
+              }
+            
+              function clearDisplay() {
+                currentInput = "";
+                currentOperator = "";
+                storedValue = "";
+                updateDisplay();
+              }
+            
+              function calculate() {
+                if (currentInput !== "" && storedValue !== "") {
+                  const num1 = parseFloat(storedValue);
+                  const num2 = parseFloat(currentInput);
+                  let result;
+            
+                  switch (currentOperator) {
+                    case "+":
+                      result = num1 + num2;
+                      break;
+                    case "-":
+                      result = num1 - num2;
+                      break;
+                    case "*":
+                      result = num1 * num2;
+                      break;
+                    case "/":
+                      result = num1 / num2;
+                      break;
+                    default:
+                      break;
+                  }
+            
+                  clearDisplay();
+                  currentInput = result.toString();
+                  updateDisplay();
+                }
+              }
+            
+              function updateDisplay() {
+                document.getElementById("display").value = currentInput !== "" ? currentInput : storedValue;
+              }
+            </script>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- End of box containers -->
+
+    <div class="label-container">
+      <h2>Financial Summary</h2>
+    </div>
+
+    <div class="table-container">
+    
+    <!-- <h2>Financial Summary</h2> -->
+    <table id="financialDataTable">
+      <tr>
+        <th>ID</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Transaction Amount</th>
+        <th>Transaction Date</th>
+        <th>Remaining Budget</th>
+      </tr>
+      {% for data in financial_data %}
+      <tr>
+        <td>{{ data.trans_id }}</td>
+        <td>{{ data.description }}</td>
+        <td>{{ data.category }}</td>
+        <td>{{ data.amount }}</td>
+        <td>{{ data.trans_date }}</td>
+        <td>{{ data.remaining_budget }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+
+  </div>
+  
+    
+  </body>
+</html>

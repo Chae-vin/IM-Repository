@@ -1,0 +1,73 @@
+@host=http://127.0.0.1:5000
+
+
+### Create an item
+POST {{host}}/transactions
+Content-Type: application/json
+
+{
+    "budget_id": 2,
+    "amount": 50.00,
+    "description": "Grocery shopping",
+    "trans_date": "2023-12-10"
+}
+
+### Read all items
+GET {{host}}/transactions
+Content-Type: application/json
+
+### Read single item by id
+GET {{host}}/transactions/2  
+Content-Type: application/json
+
+### Update an item
+PUT {{host}}/transactions/2
+Content-Type: application/json 
+ 
+{
+    "budget_id": 1,
+    "amount": 1000.00,
+    "description": "Shopping",
+    "trans_date": "2023-12-10"
+}
+
+### Delete an item
+DELETE {{host}}/transactions/1
+Content-Type: application/json
+
+
+
+
+
+
+
+
+### Create an item
+POST {{host}}/budgets
+Content-Type: application/json
+
+{
+    "category": "TESTING",
+    "amount": "10000.00"
+} 
+
+### Read all items
+GET {{host}}/budgets
+Content-Type: application/json
+
+### Read single item by id
+GET {{host}}/budgets/2
+Content-Type: application/json
+
+### Update an item
+PUT {{host}}/budgets/2
+Content-Type: application/json 
+ 
+{
+    "category": "TEST",
+    "amount": "1000.00"
+}
+
+### Delete an item
+DELETE {{host}}/budgets/12
+Content-Type: application/json
