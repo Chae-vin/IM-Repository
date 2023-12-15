@@ -5,294 +5,157 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Finance Tracker</title>
-    <style>
-      body {
-        font-family: 'Arial', sans-serif;
-        background-color: #252323;
-        margin: 20px;
-        padding: 20px;
-      }
-
-      header {
-        background-color: #474646; 
-        color: #ffffff;
-        padding: 20px;
-        text-align: center;
-        margin-bottom: 20px;
-        font-family: 'Arial', sans-serif;
-        display: block;
-        font-size: 30px; 
-        font-weight: bold; 
-        border-radius: 10px;
-      }
-  
-      h1 {
-        color: #fff;
-      }
-
-      h2, h4 {
-        margin-top: 20px;
-        margin-bottom: 10px;
-        color: #fff;
-        text-align: center;
-      }
-  
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        /* border-radius: 5px; */
-        overflow: hidden;
-        background-color: rgba(0, 0, 0, 0.1);
-      }
-
-      .table-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-      }
-
-      .label-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        text-align: center;
-        align-items: center;
-        font-size: 10px;
-      }
-  
-      th, td {
-        border: 1px solid #fff;
-        padding: 8px;
-        text-align: center;
-      }
-  
-      th {
-        background-color: rgba(70, 68, 68, 0.8);
-        font-size: 14px;
-        font-weight: 100;
-        color: #fff;
-      }
-
-      td {
-        color: #fff;
-      }
-  
-      form {
-        display: none;
-        margin-bottom: 20px;
-      }
-  
-      label {
-        display: block;
-        margin-bottom: 5px;
-        color: #fff;
-      }
-  
-      input, select, button {
-        margin-bottom: 10px;
-        padding: 8px;
-      }
-  
-      button {
-        background-color: #4caf50;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-      }
-  
-      button:hover {
-        background-color: #45a049;
-      }
-
-      .box-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-
-    .big-box {
-      width: 45%; /* Adjust the width as needed */
-      background-color: #333; /* Set background color for the boxes */
-      color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      height: auto;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .calculator-container {
-      text-align: center;
-      background-color: #555;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-  .calculator-display {
-    width: 80%;
-    padding: 8px;
-    margin-bottom: 10px;
-    font-size: 18px;
-    border: none;
-    background-color: #333;
-    color: #fff;
-    border-radius: 5px;
-  }
-
-  .calculator-button {
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    font-size: 18px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  .calculator-operator {
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    font-size: 18px;
-    background-color: #2196F3;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  .calculator-equals {
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    font-size: 18px;
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  .calculator-button:hover,
-  .calculator-operator:hover,
-  .calculator-equals:hover {
-    background-color: #45a049;
-  }
-
-    </style>
-
-    
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='index.css') }}"
+    />
   </head>
-
   <body>
-
     <div class="container">
+      <div class="button-container">
+        <button onclick="window.location.href = '/logout'">Logout</button>
+      </div>
       <header>Finance Tracker</header>
-      <br/>
-      <br/>
-       <!-- New box containers -->
-        <div class="box-container">
-          <div class="big-box">
-            <h4>Manage Transactions</h4>
-            <br/>
-            <div class="button-container">
-              <button onclick="showForm('addTransactionForm')">Add Transaction</button>
-              <button onclick="showForm('updateTransactionForm')">Update Transaction</button>
-              <button onclick="showForm('deleteTransactionForm')">Delete Transaction</button>
-              <!-- <button onclick="showForm('deleteBudgetForm')">Delete Budget</button> -->
-            </div>
+      <h1>Welcome, {{ user.username }}</h1>
+      <br />
+      <br />
+      <!-- New box containers -->
+      <div class="box-container">
+        <div class="big-box">
+          <h4>Manage Transactions</h4>
+          <br />
+          <div class="button-container">
+            <button onclick="showForm('addTransactionForm')">
+              Add Transaction
+            </button>
+            <button onclick="showForm('updateTransactionForm')">
+              Update Transaction
+            </button>
+            <button onclick="showForm('deleteTransactionForm')">
+              Delete Transaction
+            </button>
+          </div>
 
-        <!-- <h2>Add Transaction</h2> -->
-        <div class="forms-container" style="background-color: #555; padding: 15px; border-radius: 10px; margin-top: 20px;">
-          <form
-            id="addTransactionForm"
-            onsubmit="event.preventDefault(); submitForm('addTransactionForm', '/transactions')"
+          <!-- <h2>Add Transaction</h2> -->
+          <div
+            class="forms-container"
+            style="
+              background-color: #555;
+              padding: 15px;
+              border-radius: 10px;
+              margin-top: 20px;
+            "
           >
-            <label for="description">Description:</label>
-            <input type="text" id="description" name="description" required /><br />
+            <form
+              id="addTransactionForm"
+              onsubmit="event.preventDefault(); submitForm('addTransactionForm', '/transactions')"
+            >
+              <label for="description">Description:</label>
+              <input
+                type="text"
+                id="description"
+                name="description"
+                required
+              /><br />
 
-            <label for="budget_id">Category:</label>
-            <select id="budget_id" name="budget_id" required>
-              {% for budget in budgets %}
-              <option value="{{ budget.budget_id }}">{{ budget.category }}</option>
-              {% endfor %}</select
-            ><br />
+              <label for="budget_id">Category:</label>
+              <select id="budget_id" name="budget_id" required>
+                {% for budget in budgets %} {% if budget.user_id == user.user_id
+                %}
+                <option value="{{ budget.budget_id }}">
+                  {{ budget.category }}
+                </option>
+                {% endif %} {% endfor %}</select
+              ><br />
 
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" required /><br />
+              <label for="amount">Amount:</label>
+              <input type="number" id="amount" name="amount" required /><br />
 
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="trans_date" required /><br />
+              <label for="date">Date:</label>
+              <input type="date" id="date" name="trans_date" required /><br />
 
-            <button type="submit">Add Transaction</button>
-          </form>
+              <input
+                type="hidden"
+                id="user_id"
+                name="user_id"
+                value="{{ user.user_id }}"
+              />
 
-      <!-- <h2>Update Transaction</h2> -->
-      <form
-        id="updateTransactionForm"
-        onsubmit="event.preventDefault(); submitForm('updateTransactionForm', '/transactions')"
-      >
-        <label for="trans_id">ID:</label>
-        <input type="number" id="trans_id" name="trans_id" required /><br />
+              <button type="submit">Add Transaction</button>
+            </form>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required /><br />
+            <!-- <h2>Update Transaction</h2> -->
+            <form
+              id="updateTransactionForm"
+              onsubmit="event.preventDefault(); submitForm('updateTransactionForm', '/transactions')"
+            >
+              <label for="trans_id">ID:</label>
+              <input
+                type="number"
+                id="trans_id"
+                name="trans_id"
+                required
+              /><br />
 
-        <label for="budget_id">Category:</label>
-        <select id="budget_id" name="budget_id" required>
-          {% for budget in budgets %}
-          <option value="{{ budget.budget_id }}">{{ budget.category }}</option>
-          {% endfor %}</select
-        ><br />
+              <label for="description">Description:</label>
+              <input
+                type="text"
+                id="description"
+                name="description"
+                required
+              /><br />
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" required /><br />
+              <label for="budget_id">Category:</label>
+              <select id="budget_id" name="budget_id" required>
+                {% for budget in budgets %} {% if budget.user_id == user.user_id
+                %}
+                <option value="{{ budget.budget_id }}">
+                  {{ budget.category }}
+                </option>
+                {% endif %} {% endfor %}</select
+              ><br />
 
-        <label for="trans_date">Date:</label>
-        <input type="date" id="trans_date" name="trans_date" required /><br />
+              <label for="amount">Amount:</label>
+              <input type="number" id="amount" name="amount" required /><br />
 
-        <button type="submit">Update Transaction</button>
-      </form>
+              <label for="trans_date">Date:</label>
+              <input
+                type="date"
+                id="trans_date"
+                name="trans_date"
+                required
+              /><br />
 
-      <!-- <h2>Delete Transaction</h2> -->
-      <form
-        id="deleteTransactionForm"
-        onsubmit="event.preventDefault(); submitForm('deleteTransactionForm', '/transactions')"
-      >
-        <label for="trans_id">ID:</label>
-        <input type="number" id="trans_id" name="trans_id" required /><br />
-        <button type="submit">Delete Transaction</button>
-      </form>
+              <button type="submit">Update Transaction</button>
+            </form>
 
-      <!-- <h2>Delete Transaction</h2> -->
-      <form
-        id="deleteTransactionForm"
-        onsubmit="event.preventDefault(); submitForm('deleteTransactionForm', '/transactions')"
-      >
-        <label for="trans_id">ID:</label>
-        <input type="number" id="trans_id" name="trans_id" required /><br />
-        <button type="submit">Delete Transaction</button>
-      </form>
-    </div>
+            <!-- <h2>Delete Transaction</h2> -->
+            <form
+              id="deleteTransactionForm"
+              onsubmit="event.preventDefault(); submitForm('deleteTransactionForm', '/transactions')"
+            >
+              <label for="trans_id">ID:</label>
+              <input
+                type="number"
+                id="trans_id"
+                name="trans_id"
+                required
+              /><br />
+              <button type="submit">Delete Transaction</button>
+            </form>
+          </div>
 
           <script>
             function showForm(formId) {
-            // Hide all forms
-            document.querySelectorAll('form').forEach(form => {
-              form.style.display = 'none';
-            });
+              // Hide all forms
+              document.querySelectorAll("form").forEach((form) => {
+                form.style.display = "none";
+              });
 
-            // Show the selected form
-            document.getElementById(formId).style.display = 'block';
-          }
+              // Show the selected form
+              document.getElementById(formId).style.display = "block";
+            }
             function submitForm(formId, endpoint) {
               const form = document.getElementById(formId);
               const formData = new FormData(form);
@@ -330,76 +193,121 @@
                   console.error("Error:", error);
                 });
             }
-            
+            function logout() {
+              fetch("http://127.0.0.1:5000/logout", {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  window.location.href = "http://127.0.0.1:5000/";
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }
           </script>
+        </div>
 
+        <div class="big-box">
+          <!-- budget operations -->
+          <h4>Manage Budgets</h4>
+          <br />
+          <div class="button-container">
+            <button onclick="showFormBudgets('addBudgetForm')">
+              Add Budget
+            </button>
+            <button onclick="showFormBudgets('updateBudgetForm')">
+              Update Budget
+            </button>
+            <button onclick="showFormBudgets('deleteBudgetForm')">
+              Delete Budget
+            </button>
           </div>
 
-          <div class="big-box">
-            <!-- budget operations -->
-            <h4>Manage Budgets</h4>
-            <br/>
-            <div class="button-container">
-              <button onclick="showFormBudgets('addBudgetForm')">Add Budget</button>
-              <button onclick="showFormBudgets('updateBudgetForm')">Update Budget</button>
-              <button onclick="showFormBudgets('deleteBudgetForm')">Delete Budget</button>
-            </div>
+          <div
+            class="forms-container"
+            style="
+              background-color: #555;
+              padding: 15px;
+              border-radius: 10px;
+              margin-top: 20px;
+            "
+          >
+            <!-- Add budget form -->
+            <form
+              id="addBudgetForm"
+              onsubmit="event.preventDefault(); submitFormBudgets('addBudgetForm', '/budgets')"
+            >
+              <label for="category">Category:</label>
+              <input type="text" id="category" name="category" required /><br />
 
-            <div class="forms-container" style="background-color: #555; padding: 15px; border-radius: 10px; margin-top: 20px;">
-              <!-- Add budget form -->
-              <form
-                id="addBudgetForm"
-                onsubmit="event.preventDefault(); submitFormBudgets('addBudgetForm', '/budgets')"
-              >
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category" required /><br />
+              <label for="amount">Amount:</label>
+              <input type="number" id="amount" name="amount" required /><br />
 
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" required /><br />
+              <input
+                type="hidden"
+                id="user_id"
+                name="user_id"
+                value="{{ user.user_id }}"
+              />
 
-                <button type="submit">Add Budget</button>
-              </form>
-              <!-- Update budget form -->
-              <form
-                id="updateBudgetForm"
-                onsubmit="event.preventDefault(); submitFormBudgets('updateBudgetForm', '/budgets')"
-              >
-                <label for="budget_id">ID:</label>
-                <input type="number" id="budget_id" name="budget_id" required /><br />
+              <button type="submit">Add Budget</button>
+            </form>
+            <!-- Update budget form -->
+            <form
+              id="updateBudgetForm"
+              onsubmit="event.preventDefault(); submitFormBudgets('updateBudgetForm', '/budgets')"
+            >
+              <label for="budget_id">ID:</label>
+              <input
+                type="number"
+                id="budget_id"
+                name="budget_id"
+                required
+              /><br />
 
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category" required /><br />
+              <label for="category">Category:</label>
+              <input type="text" id="category" name="category" required /><br />
 
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" required /><br />
+              <label for="amount">Amount:</label>
+              <input type="number" id="amount" name="amount" required /><br />
 
-                <button type="submit">Update Budget</button>
-              </form>
-              <!-- Delete budget form -->
-              <form
-                id="deleteBudgetForm"
-                onsubmit="event.preventDefault(); submitFormBudgets('deleteBudgetForm', '/budgets')"
-              >
-                <label for="budget_id">ID:</label>
-                <input type="number" id="budget_id" name="budget_id" required /><br />
+              <button type="submit">Update Budget</button>
+            </form>
+            <!-- Delete budget form -->
+            <form
+              id="deleteBudgetForm"
+              onsubmit="event.preventDefault(); submitFormBudgets('deleteBudgetForm', '/budgets')"
+            >
+              <label for="budget_id">ID:</label>
+              <input
+                type="number"
+                id="budget_id"
+                name="budget_id"
+                required
+              /><br />
 
-                <button type="submit">Delete Budget</button>
-              </form>
-            </div>
+              <button type="submit">Delete Budget</button>
+            </form>
+          </div>
 
-            <script>
+          <script>
+            function showFormBudgets(formId) {
+              // Hide all forms
+              document.querySelectorAll("form").forEach((form) => {
+                form.style.display = "none";
+              });
 
-              function showFormBudgets(formId) {
-                // Hide all forms
-                document.querySelectorAll('form').forEach(form => {
-                  form.style.display = 'none';
-                });
-            
-                // Show the selected form
-                document.getElementById(formId).style.display = 'block';
-              }
-            
-              function submitFormBudgets(formId, endpoint) {
+              // Show the selected form
+              document.getElementById(formId).style.display = "block";
+            }
+
+            function submitFormBudgets(formId, endpoint) {
               const form = document.getElementById(formId);
               const formData = new FormData(form);
               let url = `http://127.0.0.1:5000${endpoint}`;
@@ -436,13 +344,9 @@
                   console.error("Error:", error);
                 });
             }
-            
-            </script>
-
-          </div>
-
+          </script>
+        </div>
       </div>
-
 
       <!-- container for the tbl budget and calculator -->
       <div class="box-container">
@@ -450,122 +354,161 @@
         <div class="big-box">
           <h4>Budgets Table</h4>
           <!-- <div class="label-container"> -->
-            <div class="table-container">
-              <table>
-                <tr>
-                  <th>ID</th>
-                  <th>Category</th>
-                  <th>Budget</th>
-                </tr>
-                {% for budget in budgets %}
-                <tr>
-                  <td>{{ budget.budget_id }}</td>
-                  <td>{{ budget.category }}</td>
-                  <td>{{ budget.amount }}</td>
-                 
-                </tr>
-                {% endfor %}
-              </table>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Budget</th>
+              </tr>
+              {% for budget in budgets %} {% if budget.user_id == user.user_id
+              %}
+              <tr>
+                <td>{{ budget.budget_id }}</td>
+                <td>{{ budget.category }}</td>
+                <td>{{ budget.amount }}</td>
+              </tr>
+              {% endif %} {% endfor %}
+            </table>
             <!-- </div> -->
           </div>
 
-          <br/>
+          <br />
         </div>
         <!-- calculator -->
         <div class="big-box">
           <h4>Calculator</h4>
-            <div id="calculator" class="calculator-container">
-              <input type="text" id="display" class="calculator-display" disabled />
-              <br />
-          
-              <button onclick="appendNumber('7')" class="calculator-button">7</button>
-              <button onclick="appendNumber('8')" class="calculator-button">8</button>
-              <button onclick="appendNumber('9')" class="calculator-button">9</button>
-              <button onclick="clearDisplay()" class="calculator-button">C</button>
-              <br />
-          
-              <button onclick="appendNumber('4')" class="calculator-button">4</button>
-              <button onclick="appendNumber('5')" class="calculator-button">5</button>
-              <button onclick="appendNumber('6')" class="calculator-button">6</button>
-              <button onclick="appendOperator('+')" class="calculator-operator">+</button>
-              <br />
-          
-              <button onclick="appendNumber('1')" class="calculator-button">1</button>
-              <button onclick="appendNumber('2')" class="calculator-button">2</button>
-              <button onclick="appendNumber('3')" class="calculator-button">3</button>
-              <button onclick="appendOperator('-')" class="calculator-operator">-</button>
-              <br />
-          
-              <button onclick="appendNumber('0')" class="calculator-button">0</button>
-              <button onclick="appendOperator('*')" class="calculator-operator">*</button>
-              <button onclick="appendOperator('/')" class="calculator-operator">/</button>
-              <button onclick="calculate()" class="calculator-equals">=</button>
-            </div>
-            
-            <script>
-              let currentInput = "";
-              let currentOperator = "";
-              let storedValue = "";
-            
-              function appendNumber(number) {
-                currentInput += number;
-                updateDisplay();
+          <div id="calculator" class="calculator-container">
+            <input
+              type="text"
+              id="display"
+              class="calculator-display"
+              disabled
+            />
+            <br />
+
+            <button onclick="appendNumber('7')" class="calculator-button">
+              7
+            </button>
+            <button onclick="appendNumber('8')" class="calculator-button">
+              8
+            </button>
+            <button onclick="appendNumber('9')" class="calculator-button">
+              9
+            </button>
+            <button onclick="clearDisplay()" class="calculator-button">
+              C
+            </button>
+            <br />
+
+            <button onclick="appendNumber('4')" class="calculator-button">
+              4
+            </button>
+            <button onclick="appendNumber('5')" class="calculator-button">
+              5
+            </button>
+            <button onclick="appendNumber('6')" class="calculator-button">
+              6
+            </button>
+            <button onclick="appendOperator('+')" class="calculator-operator">
+              +
+            </button>
+            <br />
+
+            <button onclick="appendNumber('1')" class="calculator-button">
+              1
+            </button>
+            <button onclick="appendNumber('2')" class="calculator-button">
+              2
+            </button>
+            <button onclick="appendNumber('3')" class="calculator-button">
+              3
+            </button>
+            <button onclick="appendOperator('-')" class="calculator-operator">
+              -
+            </button>
+            <br />
+
+            <button onclick="appendNumber('0')" class="calculator-button">
+              0
+            </button>
+            <button onclick="appendOperator('*')" class="calculator-operator">
+              *
+            </button>
+            <button onclick="appendOperator('/')" class="calculator-operator">
+              /
+            </button>
+            <button onclick="calculate()" class="calculator-equals">=</button>
+          </div>
+
+          <script>
+            let currentInput = "";
+            let currentOperator = "";
+            let storedValue = "";
+            let isCalculated = false; // Add this line
+
+            function appendNumber(number) {
+              if (isCalculated) {
+                clearDisplay();
+                isCalculated = false;
               }
-            
-              function appendOperator(operator) {
-                if (currentInput !== "") {
-                  currentOperator = operator;
-                  storedValue = currentInput;
-                  currentInput = "";
-                  updateDisplay();
-                }
-              }
-            
-              function clearDisplay() {
+              currentInput += number;
+              updateDisplay();
+            }
+
+            function appendOperator(operator) {
+              if (currentInput !== "") {
+                currentOperator = operator;
+                storedValue = currentInput;
                 currentInput = "";
-                currentOperator = "";
-                storedValue = "";
                 updateDisplay();
               }
-            
-              function calculate() {
-                if (currentInput !== "" && storedValue !== "") {
-                  const num1 = parseFloat(storedValue);
-                  const num2 = parseFloat(currentInput);
-                  let result;
-            
-                  switch (currentOperator) {
-                    case "+":
-                      result = num1 + num2;
-                      break;
-                    case "-":
-                      result = num1 - num2;
-                      break;
-                    case "*":
-                      result = num1 * num2;
-                      break;
-                    case "/":
-                      result = num1 / num2;
-                      break;
-                    default:
-                      break;
-                  }
-            
-                  clearDisplay();
-                  currentInput = result.toString();
-                  updateDisplay();
+            }
+
+            function clearDisplay() {
+              currentInput = "";
+              currentOperator = "";
+              storedValue = "";
+              updateDisplay();
+            }
+
+            function calculate() {
+              if (currentInput !== "" && storedValue !== "") {
+                const num1 = parseFloat(storedValue);
+                const num2 = parseFloat(currentInput);
+                let result;
+
+                switch (currentOperator) {
+                  case "+":
+                    result = num1 + num2;
+                    break;
+                  case "-":
+                    result = num1 - num2;
+                    break;
+                  case "*":
+                    result = num1 * num2;
+                    break;
+                  case "/":
+                    result = num1 / num2;
+                    break;
+                  default:
+                    break;
                 }
-              }
-            
-              function updateDisplay() {
-                document.getElementById("display").value = currentInput !== "" ? currentInput : storedValue;
-              }
-            </script>
 
+                clearDisplay();
+                currentInput = result.toString();
+                updateDisplay();
+                isCalculated = true; // Add this line
+              }
+            }
+
+            function updateDisplay() {
+              document.getElementById("display").value =
+                currentInput !== "" ? currentInput : storedValue;
+            }
+          </script>
         </div>
-
       </div>
-
     </div>
     <!-- End of box containers -->
 
@@ -574,45 +517,27 @@
     </div>
 
     <div class="table-container">
-    
-    <!-- <h2>Financial Summary</h2> -->
-    <table id="financialDataTable">
-      <tr>
-        <th>ID</th>
-        <th>Description</th>
-        <th>Category</th>
-        <th>Transaction Amount</th>
-        <th>Transaction Date</th>
-        <th>Remaining Budget</th>
-      </tr>
-      {% for data in financial_data %}
-      <tr>
-        <td>{{ data.trans_id }}</td>
-        <td>{{ data.description }}</td>
-        <td>{{ data.category }}</td>
-        <td>{{ data.amount }}</td>
-        <td>{{ data.trans_date }}</td>
-        <td>{{ data.remaining_budget }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-
-
-  </div>
-  
-    
+      <!-- <h2>Financial Summary</h2> -->
+      <table id="financialDataTable">
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Transaction Amount</th>
+          <th>Transaction Date</th>
+          <th>Remaining Budget</th>
+        </tr>
+        {% for data in financial_data %} {% if data.user_id == user.user_id %}
+        <tr>
+          <td>{{ data.trans_id }}</td>
+          <td>{{ data.description }}</td>
+          <td>{{ data.category }}</td>
+          <td>{{ data.amount }}</td>
+          <td>{{ data.trans_date }}</td>
+          <td>{{ data.remaining_budget }}</td>
+        </tr>
+        {% endif %} {% endfor %}
+      </table>
+    </div>
   </body>
-  
-ElementById('financeTrackerContainer').style.display = 'block';
-      }
-
-      // Call showLogin when the page loads
-      window.onload = showLogin;
-    </script>
-
-
-    
-  
-    
-  </body>
+</html>

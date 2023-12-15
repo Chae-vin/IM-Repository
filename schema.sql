@@ -2,9 +2,10 @@ CREATE TABLE `budgets` (
   `budget_id` int NOT NULL AUTO_INCREMENT,
   `category` varchar(255) DEFAULT NULL,
   `amount` decimal(10,2) DEFAULT NULL,
+  `user_id` int NOT NULL,
   PRIMARY KEY (`budget_id`),
   UNIQUE KEY `category_UNIQUE` (`category`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `transactions` (
   `trans_id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -15,6 +16,7 @@ CREATE TABLE `transactions` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `last_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remaining_budget` decimal(10,2) DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
   PRIMARY KEY (`trans_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
@@ -27,15 +29,16 @@ CREATE VIEW `get_transactions` AS
         `t`.`amount` AS `amount`,
         `t`.`description` AS `description`,
         `t`.`trans_date` AS `trans_date`,
-        `t`.`created_at` AS `created_at`
+        `t`.`created_at` AS `created_at`,
+        `t`.`user_id` AS `user_id`
     FROM
         (`transactions` `t`
         LEFT JOIN `budgets` `b` ON ((`t`.`budget_id` = `b`.`budget_id`)))
 
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_budget`(IN p_category VARCHAR(255), IN p_amount DECIMAL(10, 2))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_budget`(IN p_category VARCHAR(255), IN p_amount DECIMAL(10, 2), IN p_user_id INT)
 BEGIN
-    INSERT INTO im2.budgets (category, amount) VALUES (p_category, p_amount);
+    INSERT INTO im2.budgets (category, amount, user_id) VALUES (p_category, p_amount, p_user_id);
 SELECT 
     *
 FROM
@@ -49,14 +52,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `create_transaction`(
     IN p_budget_id INT,
     IN p_amount DECIMAL(10, 2),
     IN p_description VARCHAR(255),
-    IN p_trans_date DATE
+    IN p_trans_date DATE,
+    IN p_user_id INT
 )
 BEGIN
     DECLARE remaining_budget DECIMAL(10, 2);
-
-    INSERT INTO im2.transactions(budget_id, amount, description, trans_date) 
-    VALUES (p_budget_id, p_amount, p_description, p_trans_date);
-
+ 
+    INSERT INTO im2.transactions(budget_id, amount, description, trans_date, user_id) 
+    VALUES (p_budget_id, p_amount, p_description, p_trans_date, p_user_id);
+ 
     SELECT 
         (b.amount - p_amount)
     INTO remaining_budget
@@ -64,15 +68,15 @@ BEGIN
         im2.budgets b
     WHERE
         b.budget_id = p_budget_id;
-
+ 
     UPDATE im2.transactions
     SET remaining_budget = remaining_budget
     WHERE trans_id = LAST_INSERT_ID();
-
+ 
     UPDATE im2.budgets
     SET amount = remaining_budget
     WHERE budget_id = p_budget_id;
-
+ 
     SELECT * FROM im2.transactions WHERE trans_id = LAST_INSERT_ID();
 END
 
@@ -82,7 +86,6 @@ BEGIN
     DELETE FROM budgets WHERE budget_id = p_budget_id;
     SELECT p_budget_id AS budget_id;
 END
-
 
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_transaction`(IN p_trans_id INT)
@@ -152,7 +155,6 @@ BEGIN
 END
 
 
-
 CREATE DEFINER=`root`@`localhost` TRIGGER `before_transaction_insert` BEFORE INSERT ON `transactions` FOR EACH ROW BEGIN
     DECLARE budget_remaining DECIMAL(10, 2);
 
@@ -206,7 +208,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE VIEW `get_users` AS
     SELECT 
@@ -225,7 +227,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `create_user`(
 BEGIN
     INSERT INTO users (username, password, email) VALUES (p_username, p_password, p_email);
     SELECT * FROM users WHERE user_id = LAST_INSERT_ID();
-END;
+END
 
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_user`(
@@ -243,12 +245,10 @@ BEGIN
     WHERE user_id = p_user_id;
 
     SELECT * FROM users WHERE user_id = p_user_id;
-END;
-
+END
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_user`(IN p_user_id INT)
 BEGIN
     DELETE FROM users WHERE user_id = p_user_id;
     SELECT p_user_id AS user_id;
-END;
-
+END

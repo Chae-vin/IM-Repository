@@ -1,8 +1,8 @@
 from database import fetchone, fetchall
 
-def create_transaction(budget_id, amount, description, trans_date):
-    query = "CALL create_transaction(%s, %s, %s, %s)"
-    params = (budget_id, amount, description, trans_date)
+def create_transaction(budget_id, amount, description, trans_date, user_id):
+    query = "CALL create_transaction(%s, %s, %s, %s, %s)"
+    params = (budget_id, amount, description, trans_date, user_id)
     result = fetchone(query, params)
     return result
 
@@ -10,6 +10,7 @@ def get_transactions():
     query = "SELECT * FROM get_transactions"
     result = fetchall(query)
     return result
+
 
 def get_transaction(trans_id):
     query = "SELECT * FROM get_transactions WHERE trans_id = %s"
@@ -28,5 +29,3 @@ def delete_transaction(trans_id):
     params = (trans_id,)
     result = fetchone(query, params)
     return result
-
-

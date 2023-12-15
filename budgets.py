@@ -1,9 +1,9 @@
 from database import fetchone, fetchall
 
 
-def create_budget(category, amount):
-    query = "CALL create_budget(%s, %s)"
-    params = (category, amount)
+def create_budget(category, amount, user_id):
+    query = "CALL create_budget(%s, %s, %s)"
+    params = (category, amount, user_id)
     result = fetchone(query, params)
     return result
 

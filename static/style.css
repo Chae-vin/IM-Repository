@@ -20,78 +20,29 @@
     z-index: 100;
 }
 
+.form-container1 {
+    /* background-color: white; */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin-top: 2%;
+    margin-right: 10%;
+  }
+
+.form-container2 {
+    /* background-color: white; */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin-top: 2%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
 body {
     background: url('finance.png') no-repeat;
-}
-
-.navbar a {
-    position: relative;
-    font-size: 16px;
-    color: #e4e4e4;
-    text-decoration: none;
-    font-weight: 500;
-    margin-right: 30px;
-}
-
-.navbar a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    width: 100%;
-    height: 2px;
-    background: #e4e4e4;
-    border-radius: 5px;
-    transform: translateY(10px);
-    opacity: 0;
-    transition: .5s;
-}
-
-.navbar a:hover:after {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.search-bar{
-    width: 250px;
-    height: 45px;
-    background: transparent;
-    border: 2px solid #e4e4e4;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-}
-
-.search-bar input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    color:#e4e4e4;
-    padding-left: 10px;
-}
-
-.search-bar input::placeholder {
-    color: #e4e4e4;
-}
-
-.search-bar button {
-    width: 40px;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    display: flex;
-    justify-content:center ;
-    align-items: center;
-    cursor: pointer;
-}
-
-.search-bar button i{
-    font-size: 22px;
-    color: #e4e4e4;
-
 }
 
 .container {
@@ -100,11 +51,10 @@ body {
     left: 50%;
     transform: translate(-50%,-50%);
     width: 75%;
-    height: 520px;
-    background: transparent;
+    height: 90%;
     background-size: cover;
     background-position: center;
-    background-color: rgb(36, 35, 35);
+    background-color: rgb(36, 35, 35, 0.9);
 }
 
 .container .content {
@@ -119,34 +69,6 @@ body {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-}
-
-.text-sci h2 {
-    font-size: 30px;
-    line-height: 1;
-    margin-bottom: 40px;
-    position: relative;
-}
-
-.text-sci h2 span {
-    font-size: 20px;
-    
-}
-
-.text-sci p {
-    font-size: 16px;
-    margin: 20px 0;
-}
-
-.social-icons a i {
-    font-size: 22px;
-    color: #e4e4e4;
-    margin-right: 10px;
-    transition: .5s ease;
-}
-
-.social-icons a:hover i {
-    transform: scale(1.2);
 }
 
 .container .logreg-box {
@@ -346,3 +268,7 @@ body {
  .img3{
     background: url('budget.png') no-repeat;
  }
+
+ 
+
+ 

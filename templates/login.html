@@ -1,37 +1,71 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login and Signup</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
   </head>
   <body>
-    <div class="big-box">
+    <div class="body"></div>
+
+    <div class="container">
+
+      <div>
+        <h1 style="margin-top: 3%; margin-bottom: 2%; text-align: center; color: aliceblue;">Welcome to Finance Tracker!</h1>
+        <p style="text-align: center; color: aliceblue;">Start managing your finances with ease. Track your transactions, monitor budgets, and stay financially organized.</p>
+        <p style="text-align: center; color: aliceblue;">Gain control over your spending, set savings goals, and make informed financial decisions with our user-friendly platform. Empower yourself to achieve financial success and build a secure future.</p>
+
+        <div style="display: flex; justify-content: center;">
+             <img src="{{ url_for('static', filename='transactions.png') }}" alt="Transaction Icon" style="width: 50px; height: 50px; margin: 0 10px;" />
+             <img src="{{ url_for('static', filename='calculator.png') }}" style="width: 50px; height: 50px; margin: 0 10px;" />
+             <img src="{{ url_for('static', filename='budget.png') }}" alt="Budget Icon" style="width: 50px; height: 50px; margin: 0 10px;" />
+         </div>
+         <div style="display: flex; justify-content: center;">
+             <p style="font-size: 10px; font-weight: bold; margin-right: 13px; margin-left: 8px; color: aliceblue;">Transact</p>
+             <p style="font-size: 10px; font-weight: bold; margin-right: 25px; margin-left: 20px; color: aliceblue;">Calculate</p>
+             <p style="font-size: 10px; font-weight: bold; margin-right: 20px; color: aliceblue;">Budget</p>
+         </div>
+      </div>
+
+      <div style="display: flex; justify-content: center;">
       <!-- Login Form -->
-      <h2>Login</h2>
+      <div class="form-container1">
+      <h2 style="color: aliceblue; text-align: center;">Login</h2>
       <form
         id="login-form"
         onsubmit="event.preventDefault(); submitLoginForm()"
       >
-        <label for="username">Username:</label><br />
-        <input type="text" id="username" name="username" /><br />
-        <label for="password">Password:</label><br />
-        <input type="password" id="password" name="password" /><br />
-        <input type="submit" value="Login" />
+        <label for="username" style="color: aliceblue; font-size: 10px;">Username:</label><br />
+        <input type="text" id="username" name="username" style="width: 100%;"/><br />
+        <label for="password" style="color: aliceblue; font-size: 10px">Password:</label><br />
+        <input type="password" id="password" name="password" style="width: 100%;"/><br />
+        <input type="submit" value="Login" style="display: block; margin: 0 auto; margin-top: 5%; width: 50%; font-size: 13px; background-color: #ff8c42; border: 1px solid white;"/>
       </form>
+    </div>
+
+    <hr style="border-color: aliceblue; margin: 5px 0; margin-right: 10%; margin-top: 2%;">
 
       <!-- Signup Form -->
-      <h2>Signup</h2>
+      <div class="form-container2">
+      <h2 style="color: aliceblue; text-align: center;">Signup</h2>
       <form
         id="signup-form"
         onsubmit="event.preventDefault(); submitSignupForm()"
       >
-        <label for="username">Username:</label><br />
-        <input type="text" id="username" name="username" /><br />
-        <label for="password">Password:</label><br />
-        <input type="password" id="password" name="password" /><br />
-        <label for="email">Email:</label><br />
-        <input type="text" id="email" name="email" /><br />
-        <input type="submit" value="Sign Up" />
+        <label for="username" style="color: aliceblue; font-size: 10px">Username:</label><br />
+        <input type="text" id="username" name="username" style="width: 100%;"/><br />
+        <label for="password" style="color: aliceblue; font-size: 10px">Password:</label><br />
+        <input type="password" id="password" name="password" style="width: 100%;"/><br />
+        <label for="email" style="color: aliceblue; font-size: 10px">Email:</label><br />
+        <input type="text" id="email" name="email" style="width: 100%;"/><br />
+        <input type="submit" value="Sign Up" style="display: block; margin: 0 auto; margin-top: 5%; width: 50%; font-size: 13px; background-color: #ff8c42; border: 1px solid white;"/>
       </form>
+    </div>
+  </div>
+    
     </div>
 
     <script>

@@ -22,13 +22,13 @@ from users import (
     get_userById,
     update_user,
     delete_user,
-    authenticate_user
+    authenticate_user,
 )
 from database import set_mysql
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.secret_key = 'piogensan'  # replace 'your_secret_key' with your actual secret key
+app.secret_key = "piogensan"  # replace 'your_secret_key' with your actual secret key
 CORS(app)
 
 app.config["MYSQL_USER"] = "root"
@@ -48,27 +48,36 @@ def login_page():
         password = data["password"]
         user = authenticate_user(username, password)
         if user:
-            session['username'] = username
+            session["username"] = username
             return jsonify({"message": "Login successful"})
         else:
             return jsonify({"message": "Invalid username or password"}), 401
     else:
         return render_template("login.html")
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('login_page'))
 
 @app.route("/index")
 def home():
-    if 'username' not in session:
-        return redirect(url_for('login_page'))
+    if "username" not in session:
+        return redirect(url_for("login_page"))
     else:
-        # user = get_user_by_username(session['username'])  # Assuming you have this function
-        # user_id = user['user_id']
         content_type_header = request.headers.get("Content-Type")
         if content_type_header and "application/json" in content_type_header:
-            return jsonify(financial_data=get_transactions(), budgets=get_budgets())
+            return jsonify(
+                financial_data=get_transactions(),
+                budgets=get_budgets(),
+                user=get_user_by_username(session["username"]),
+            )
         else:
             return render_template(
-                "index.html", financial_data=get_transactions(), budgets=get_budgets()
+                "index.html",
+                financial_data=get_transactions(),
+                budgets=get_budgets(),
+                user=get_user_by_username(session["username"]),
             )
 
 
@@ -79,8 +88,7 @@ def users():
         username = data["username"]
         password = data["password"]
         email = data["email"]
-        user_id = create_user(
-            username, password, email)
+        user_id = create_user(username, password, email)
         return jsonify({"created user": user_id})
     else:
         users = get_users()
@@ -112,8 +120,8 @@ def transactions():
         amount = data["amount"]
         description = data["description"]
         trans_date = data["trans_date"]
-        trans_id = create_transaction(
-            budget_id, amount, description, trans_date)
+        user_id = data["user_id"]
+        trans_id = create_transaction(budget_id, amount, description, trans_date, user_id)
         return jsonify({"created transaction": trans_id})
     else:
         transactions = get_transactions()
@@ -146,7 +154,8 @@ def budgets():
         data = request.get_json()
         category = data["category"]
         amount = data["amount"]
-        budget_id = create_budget(category, amount)
+        user_id = data["user_id"]
+        budget_id = create_budget(category, amount, user_id)
         return jsonify({"created budget: ": budget_id})
     else:
         budgets = get_budgets()
@@ -167,6 +176,7 @@ def budget(budget_id):
     else:
         budget = get_budget(budget_id)
         return jsonify(budget)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
